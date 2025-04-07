@@ -2,18 +2,27 @@
     <head><title>Ejemplo</title></head>
     <body>
         <?php
-        // ESTE DOCUMENTO TOCA PEGARLO DENTRO DEL XAMPP
+        // Mostrar errores para depuración
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
+
         if (isset($_POST['nota'])) {
-            // TO DO: Hacer el filename personalizable
-            $ar = fopen("Losdatosgb.txt", "a") or die("Problemas de acceso");
-            fputs($ar, $_POST['nota']);
-            fputs($ar, "\n");
+            $filename = "Losdatosgb.txt";
+
+            // Intentar abrir el archivo
+            $ar = fopen($filename, "a");
+            if (!$ar) {
+                die("<b>Error:</b> No se pudo crear o abrir el archivo. Verifica los permisos.");
+            }
+
+            // Escribir la nota en el archivo
+            fputs($ar, $_POST['nota'] . "\n");
+            fclose($ar);
+
             echo "<br><b>SE GUARDÓ CORRECTAMENTE:</b><br><br>";
         } else {
-            // Este código PHP se encarga de manejar un formulario que permite guardar, leer y borrar comentarios en un archivo de texto.
             echo "<br><b>Error: No se recibió ninguna nota.</b><br><br>";
         }
         ?>
     </body>
 </html>
-//--
