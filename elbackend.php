@@ -2,17 +2,16 @@
     <head><title>  ejemplo </title></head>
     <body>
         <?php
-         if(isset($_POST['grabar']))
+        //ESTE DOCUMENTO TOCA PEGARLO DENTRO DEL XAMPP
+         if(isset($_POST['Encriptar']))
          {
+            // TO DO Hacer el filename personalizable
             $ar=fopen("datosgb.txt","a")or die("problemas de acceso");
-            fputs($ar,$_REQUEST['nombre']);
+            fputs($ar,$_REQUEST['nota']);
             fputs($ar,"\n");
-            fputs($ar,$_REQUEST['comentarios']);
-            fclose($ar);
 
             echo "<br> <b> SE GUARDO CORRECTAMENTE : </b><br><br>";
-            echo "nombre : ".$_REQUEST['nombre']."<br>";
-            echo "comentarios : <br>".$_REQUEST['comentarios']."<br>";
+
          }
         ?>
     </body>
