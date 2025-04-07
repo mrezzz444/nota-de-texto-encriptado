@@ -10,8 +10,10 @@
             fputs($ar, "\n");
             echo "<br><b>SE GUARDÓ CORRECTAMENTE:</b><br><br>";
         } else {
+            // Este código PHP se encarga de manejar un formulario que permite guardar, leer y borrar comentarios en un archivo de texto.
             echo "<br><b>Error: No se recibió ninguna nota.</b><br><br>";
         }
         ?>
     </body>
 </html>
+//--
