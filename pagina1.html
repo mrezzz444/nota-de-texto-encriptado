@@ -7,11 +7,15 @@
   </head>
   <body>
     <h1>Escribe una nota para encriptarla</h1>
-    <!-- Pendiente: Implementar la lógica para el action -->
-    <form method="post" action="" target="frameResultados">
+    <form
+      method="POST"
+      action="http://localhost:80/elbackend.php"
+      target="resultados"
+    >
       <textarea name="nota" id="nota" cols="30" rows="10"></textarea>
       <br />
-      <input type="submit" value="Encriptar" />
+      <input type="submit" name="submit" value="Encriptar" />
     </form>
+    <iframe name="resultados"></iframe>
   </body>
 </html>
