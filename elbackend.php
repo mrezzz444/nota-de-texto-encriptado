@@ -26,7 +26,7 @@
         elseif (isset($_POST('leer'))){
            if(file_exists($ar));
            $ar = fopen("datosgb.txt","r")or die("Problemas, problemas");
-            
+            //
          while(!feof($ar)){
             $vTexto = fgets($ar);
             $nuevoTexto = nl2br($vTexto);
