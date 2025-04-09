@@ -15,7 +15,7 @@
                 die("<b>Error:</b> No se pudo crear o abrir el archivo. Verifica los permisos.");
             }
 
-            // Escribir la nota en el archivo
+            $TextoOriginal = $_POST['nota'];
             fputs($ar, $_POST['nota'] . "\n");
             fclose($ar);
 
