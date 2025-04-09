@@ -59,6 +59,29 @@
       }
     </style>
   </head>
+  <script>
+    function DesEncriptar() {
+      var M, N;
+      var vEntero = 0;
+
+      textoDesEncriptado = "";
+      texto = document.getElementById("cTexto").value;
+      for (M = 0; M < texto.length; M = M + 1) {
+        N = M + 1;
+        vEntero = texto.substring(M, N).charCodeAt(0);
+        vEntero = vEntero - llave;
+        textoDesEncriptado = textoDesEncriptado + String.fromCharCode(vEntero);
+      }
+
+      document.getElementById("cLlave").value = "";
+      document.getElementById("cTexto").value = textoDesEncriptado;
+    }
+
+    function fDesEncriptar() {
+      DefinirLlave();
+      DesEncriptar();
+    }
+  </script>
   <body>
     <h1>Leer Nota Guardada</h1>
     <form
@@ -79,5 +102,17 @@
         border-radius: 4px;
       "
     ></iframe>
+    <textarea
+      id="textote"
+      placeholder="pega el conenido el iframe para desencriptar"
+      id="cTexto"
+    >
+    </textarea>
+    <input
+      type="button"
+      value="Desencriptar"
+      id="bDesEncriptar"
+      onclick="fDesEncriptar()"
+    />
   </body>
 </html>
