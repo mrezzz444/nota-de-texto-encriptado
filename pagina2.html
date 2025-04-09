@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Escribir nota</title>
+  </head>
+  <script language="javascript" `>
+    var llave = 0;
+    var textoDesEncriptado = "";
+    function DesEncriptar() {
+      var M, N;
+      var vEntero = 0;
+
+      textoDesEncriptado = "";
+      texto = document.getElementById("cTexto").value;
+      for (M = 0; M < texto.length; M = M + 1) {
+        N = M + 1;
+        vEntero = texto.substring(M, N).charCodeAt(0);
+        vEntero = vEntero - llave;
+        textoDesEncriptado = textoDesEncriptado + String.fromCharCode(vEntero);
+      }
+
+      document.getElementById("cLlave").value = "";
+      document.getElementById("cTexto").value = textoDesEncriptado;
+    }
+  </script>
+  <body>
+    <center>
+      <h1>Nota guardada</h1>
+      <form
+        method=""
+        action="http://localhost:80/elbackend.php"
+        target="resultados"
+      >
+        <textarea name="nota" id="nota" cols="30" rows="10"></textarea>
+        <br />
+        <br />
+        <input type="submit" name="submit" value="Desencriptar" />
+      </form>
+    </center>
+  </body>
+</html>

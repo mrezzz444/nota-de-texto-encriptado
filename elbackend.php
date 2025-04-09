@@ -23,6 +23,17 @@
         } else {
             echo "<br><b>Error: No se recibió ninguna nota.</b><br><br>";
         }
+        elseif (isset($_POST('leer'))){
+           if(file_exists($ar));
+           $ar = fopen("datosgb.txt","r")or die("Problemas, problemas");
+            
+         while(!feof($ar)){
+            $vTexto = fgets($ar);
+            $nuevoTexto = nl2br($vTexto);
+            echo $nuevoTexto;
+         }
+         fclose($ar);
+        }
         ?>
     </body>
 </html>
