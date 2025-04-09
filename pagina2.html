@@ -1,43 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Escribir nota</title>
-  </head>
-  <script language="javascript" `>
-    var llave = 0;
-    var textoDesEncriptado = "";
-    function DesEncriptar() {
-      var M, N;
-      var vEntero = 0;
-
-      textoDesEncriptado = "";
-      texto = document.getElementById("cTexto").value;
-      for (M = 0; M < texto.length; M = M + 1) {
-        N = M + 1;
-        vEntero = texto.substring(M, N).charCodeAt(0);
-        vEntero = vEntero - llave;
-        textoDesEncriptado = textoDesEncriptado + String.fromCharCode(vEntero);
+    <title>Leer Nota</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
       }
 
-      document.getElementById("cLlave").value = "";
-      document.getElementById("cTexto").value = textoDesEncriptado;
-    }
-  </script>
+      h1 {
+        color: #4a90e2;
+        margin-bottom: 20px;
+      }
+
+      form {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+      }
+
+      textarea {
+        width: 100%;
+        height: 150px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: none;
+        font-size: 14px;
+      }
+
+      input[type="submit"] {
+        background-color: #4a90e2;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        margin-top: 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #357ab8;
+      }
+    </style>
+  </head>
   <body>
-    <center>
-      <h1>Nota guardada</h1>
-      <form
-        method=""
-        action="http://localhost:80/elbackend.php"
-        target="resultados"
-      >
-        <textarea name="nota" id="nota" cols="30" rows="10"></textarea>
-        <br />
-        <br />
-        <input type="submit" name="submit" value="Desencriptar" />
-      </form>
-    </center>
+    <h1>Leer Nota Guardada</h1>
+    <form
+      method="POST"
+      action="http://localhost/elbackend.php"
+      target="resultados"
+    >
+      <input type="hidden" name="leer" value="1" />
+      <input type="submit" value="Leer Nota" />
+    </form>
+    <iframe
+      name="resultados"
+      style="
+        width: 100%;
+        height: 200px;
+        border: 1px solid #ccc;
+        margin-top: 20px;
+        border-radius: 4px;
+      "
+    ></iframe>
   </body>
 </html>
