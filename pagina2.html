@@ -60,20 +60,26 @@
     </style>
   </head>
   <script>
-    function DesEncriptar() {
-      var M, N;
-      var vEntero = 0;
+    let llave = 0;
 
-      textoDesEncriptado = "";
-      texto = document.getElementById("cTexto").value;
-      for (M = 0; M < texto.length; M = M + 1) {
-        N = M + 1;
-        vEntero = texto.substring(M, N).charCodeAt(0);
-        vEntero = vEntero - llave;
-        textoDesEncriptado = textoDesEncriptado + String.fromCharCode(vEntero);
+    function DefinirLlave() {
+      const TLlave = document.getElementById("cLlave").value;
+      llave = 0;
+
+      for (let i = 0; i < TLlave.length; i++) {
+        llave += TLlave.charCodeAt(i); // Suma los valores ASCII de los caracteres
+      }
+    }
+
+    function DesEncriptar() {
+      let textoDesEncriptado = "";
+      const texto = document.getElementById("cTexto").value;
+
+      for (let M = 0; M < texto.length; M++) {
+        const vEntero = texto.charCodeAt(M) - llave; // Resta la llave al valor ASCII
+        textoDesEncriptado += String.fromCharCode(vEntero);
       }
 
-      document.getElementById("cLlave").value = "";
       document.getElementById("cTexto").value = textoDesEncriptado;
     }
 
@@ -103,11 +109,10 @@
       "
     ></iframe>
     <textarea
-      id="textote"
-      placeholder="pega el conenido el iframe para desencriptar"
       id="cTexto"
-    >
-    </textarea>
+      placeholder="Pega el contenido del iframe para desencriptar"
+    ></textarea>
+    <input type="text" id="cLlave" placeholder="Llave de desencriptación" />
     <input
       type="button"
       value="Desencriptar"

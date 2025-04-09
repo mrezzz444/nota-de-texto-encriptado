@@ -9,7 +9,8 @@
         // Guardar nota
         if (isset($_POST['nota'])) {
             $filename = "Losdatosgb.txt";
-
+            // Limpiar el contenido del archivo antes de guardar la nueva nota
+            file_put_contents($filename, "");
             // Intentar abrir el archivo
             $ar = fopen($filename, "a");
             if (!$ar) {

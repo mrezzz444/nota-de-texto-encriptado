@@ -75,7 +75,7 @@
         llave = 0;
 
         for (let i = 0; i < TLlave.length; i++) {
-          llave += TLlave.charCodeAt(i);
+          llave += TLlave.charCodeAt(i); // Suma los valores ASCII de los caracteres
         }
       }
 
@@ -84,12 +84,12 @@
         let textoEncriptado = "";
 
         for (let i = 0; i < texto.length; i++) {
-          const charCode = texto.charCodeAt(i) + llave;
+          const charCode = texto.charCodeAt(i) + llave; // Suma la llave al valor ASCII
           textoEncriptado += String.fromCharCode(charCode);
         }
 
         document.getElementById("nota").value = textoEncriptado;
-        document.getElementById("llave").value = "";
+        document.getElementById("llave").value = ""; // Limpia el campo de la llave
       }
 
       function EncriptarNota() {
