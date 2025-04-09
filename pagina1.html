@@ -1,21 +1,128 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Escribir nota</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f2f4f8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+
+      .container {
+        background-color: #ffffff;
+        padding: 2rem 2.5rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 600px;
+      }
+
+      h1 {
+        text-align: center;
+        color: #333333;
+        margin-bottom: 1.5rem;
+      }
+
+      textarea,
+      input[type="text"] {
+        width: 100%;
+        padding: 0.75rem;
+        margin-top: 0.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid #cccccc;
+        border-radius: 8px;
+        font-size: 1rem;
+        box-sizing: border-box;
+      }
+
+      input[type="submit"] {
+        background-color: #4a90e2;
+        color: white;
+        padding: 0.75rem 1.25rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 100%;
+        transition: background-color 0.3s ease;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #357ab8;
+      }
+
+      iframe {
+        margin-top: 1rem;
+        width: 100%;
+        height: 120px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #fafafa;
+      }
+    </style>
+    <script>
+      let llave = 0;
+
+      function DefinirLLave() {
+        const TLlave = document.getElementById("llave").value;
+        llave = 0;
+
+        for (let i = 0; i < TLlave.length; i++) {
+          llave += TLlave.charCodeAt(i);
+        }
+      }
+
+      function Encriptar() {
+        const texto = document.getElementById("nota").value;
+        let textoEncriptado = "";
+
+        for (let i = 0; i < texto.length; i++) {
+          const charCode = texto.charCodeAt(i) + llave;
+          textoEncriptado += String.fromCharCode(charCode);
+        }
+
+        document.getElementById("nota").value = textoEncriptado;
+        document.getElementById("llave").value = "";
+      }
+
+      function EncriptarNota() {
+        DefinirLLave();
+        Encriptar();
+        console.log("Nota encriptada:", document.getElementById("nota").value);
+      }
+
+      function PrepararEnvio() {
+        EncriptarNota();
+        return true;
+      }
+    </script>
   </head>
   <body>
-    <h1>Escribe una nota para encriptarla</h1>
-    <form
-      method="POST"
-      action="http://localhost/BackendSistemasWeb/elbackend.php"
-      target="resultados"
-    >
-      <textarea name="nota" id="nota" cols="30" rows="10"></textarea>
-      <br />
-      <input type="submit" name="submit" value="Encriptar" />
-    </form>
-    <iframe name="resultados"></iframe>
+    <div class="container">
+      <h1>Escribe una nota para encriptarla</h1>
+      <form
+        method="POST"
+        action="http://localhost/elbackend.php"
+        target="resultados"
+        onsubmit="return PrepararEnvio()"
+      >
+        <label for="nota">Nota:</label>
+        <textarea name="nota" id="nota" rows="8" required></textarea>
+
+        <label for="llave">Llave de encriptación:</label>
+        <input id="llave" type="text" placeholder="Ingresa la llave" required />
+
+        <input type="submit" value="Encriptar y Enviar" />
+      </form>
+
+      <iframe name="resultados"></iframe>
+    </div>
   </body>
 </html>
