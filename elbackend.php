@@ -23,7 +23,8 @@
 
             echo "<br><b>SE GUARDÓ CORRECTAMENTE:</b><br><br>";
         } elseif (isset($_POST['leer'])) {
-            $filename = "Losdatosgb.txt";
+            $filename = isset($_POST['archivo']) && !empty($_POST['archivo']) ? $_POST['archivo'] : "Losdatosgb.txt";//para leer el archivo por defecto
+
 
             // Verificar si el archivo existe
             if (file_exists($filename)) {
@@ -39,6 +40,10 @@
             } else {
                 echo "<br><b>Error:</b> El archivo no existe.</b><br><br>";
             }
+        } elseif (isset($_POST['maestra'])) { //se agrego para guardar la llave maestra
+            $llaveMaestra = $_POST['maestra'];
+            file_put_contents("llavemaestra.txt", $llaveMaestra);
+            echo "<b>Llave maestra guardada exitosamente.</b>";
         } else {
             echo "<br><b>Error:</b> No se recibió ninguna acción válida.</b><br><br>";
         }

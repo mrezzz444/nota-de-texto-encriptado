@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generar Llave Maestra</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      h1 {
+        color: #4a90e2;
+        margin-bottom: 20px;
+      }
+
+      form {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      input[type="text"],
+      input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        margin-top: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+        box-sizing: border-box;
+      }
+
+      input[type="submit"] {
+        background-color: #4a90e2;
+        color: white;
+        cursor: pointer;
+        border: none;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #357ab8;
+      }
+
+      .mensaje {
+        margin-top: 15px;
+        color: green;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Generar Llave Maestra</h1>
+
+    <form
+      method="POST"
+      action="http://localhost/elbackend.php"
+      target="resultado"
+    >
+      <label for="llave" style="display: block; text-align: center"
+        >LLAVE MAESTRA
+      </label>
+      <input
+        type="text"
+        name="llave_maestra"
+        placeholder="Escribe la llave maestra"
+        required
+      />
+      <input type="submit" value="Crear llave maestra" />
+    </form>
+
+    <iframe
+      name="resultado"
+      style="
+        width: 100%;
+        max-width: 400px;
+        height: 100px;
+        border: none;
+        margin-top: 15px;
+      "
+    ></iframe>
+  </body>
+</html>

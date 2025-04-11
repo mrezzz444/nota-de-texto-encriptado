@@ -97,6 +97,11 @@
     >
       <input type="hidden" name="leer" value="1" />
       <input type="submit" value="Leer Nota" />
+      <form
+        method="POST"
+        action="http://localhost/elbackend.php"
+        target="resultados"
+      ></form>
     </form>
     <iframe
       name="resultados"
@@ -119,5 +124,22 @@
       id="bDesEncriptar"
       onclick="fDesEncriptar()"
     />
+    <br />
+    <form
+      method="POST"
+      action="http://localhost/elbackend.php"
+      target="resultados"
+    >
+      <input
+        type="text"
+        name="archivo"
+        placeholder="nombre del archivo"
+        required
+        style="display: block; margin: 0 auto"
+      />
+
+      <input type="hidden" name="leer" value="1" />
+      <input type="submit" value="LEER NOTA" />
+    </form>
   </body>
 </html>
