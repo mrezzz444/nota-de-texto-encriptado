@@ -1,52 +1,88 @@
 <html lang="es-MX">
-    <head><title>Ejemplo</title></head>
-    <body>
-        <?php
-        // Mostrar errores para depuración
-        error_reporting(E_ALL);
-        ini_set('display_errors', 1);
+<head><title>Ejemplo</title></head>
+<body>
+<?php
+// Mostrar errores para depuración
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-        // Guardar nota
-        if (isset($_POST['nota'])) {
-            $filename = "Losdatosgb.txt";
-            // Limpiar el contenido del archivo antes de guardar la nueva nota
-            file_put_contents($filename, "");
-            // Intentar abrir el archivo
-            $ar = fopen($filename, "a");
-            if (!$ar) {
-                die("<b>Error:</b> No se pudo crear o abrir el archivo. Verifica los permisos.");
-            }
+// Función para encriptar texto
+function encriptarTexto($texto, $llave) {
+    return base64_encode(openssl_encrypt($texto, 'AES-128-ECB', $llave));
+}
 
-            $TextoOriginal = $_POST['nota'];
-            fputs($ar, $TextoOriginal . "\n");
-            fclose($ar);
+// Función para desencriptar texto
+function desencriptarTexto($textoEncriptado, $llave) {
+    return openssl_decrypt(base64_decode($textoEncriptado), 'AES-128-ECB', $llave);
+}
 
-            echo "<br><b>SE GUARDÓ CORRECTAMENTE:</b><br><br>";
-        } elseif (isset($_POST['leer'])) {
-            $filename = isset($_POST['archivo']) && !empty($_POST['archivo']) ? $_POST['archivo'] : "Losdatosgb.txt";//para leer el archivo por defecto
+// Función para obtener la llave maestra
+function obtenerLlaveMaestra() {
+    return file_exists("llavemaestra.txt") ? file_get_contents("llavemaestra.txt") : "";
+}
+
+//guardar nota
+if (isset($_POST['nota'])) {
+    $filename = "Losdatosgb.txt";
+    $llave = isset($_POST['llave_individual']) ? $_POST['llave_individual'] : obtenerLlaveMaestra();
+
+    if (!$llave) {
+        die("<b>Error:</b> No se proporcionó una llave válida.");
+    }
+
+    $textoOriginal = $_POST['nota'];
+    $textoEncriptado = encriptarTexto($textoOriginal, $llave);
+    file_put_contents($filename, $textoEncriptado . "\n");
+
+    echo "<br><b>SE GUARDÓ CORRECTAMENTE:</b><br><br>";
 
 
-            // Verificar si el archivo existe
-            if (file_exists($filename)) {
-                $ar = fopen($filename, "r") or die("<b>Error:</b> No se pudo abrir el archivo.");
+// Leer nota y desencriptar
 
-                // Leer y mostrar el contenido del archivo
-                while (!feof($ar)) {
-                    $vTexto = fgets($ar);
-                    $nuevoTexto = nl2br($vTexto);
-                    echo $nuevoTexto;
-                }
-                fclose($ar);
-            } else {
-                echo "<br><b>Error:</b> El archivo no existe.</b><br><br>";
-            }
-        } elseif (isset($_POST['maestra'])) { //se agrego para guardar la llave maestra
-            $llaveMaestra = $_POST['maestra'];
-            file_put_contents("llavemaestra.txt", $llaveMaestra);
-            echo "<b>Llave maestra guardada exitosamente.</b>";
-        } else {
-            echo "<br><b>Error:</b> No se recibió ninguna acción válida.</b><br><br>";
+} elseif (isset($_POST['leer'])) {
+    $filename = isset($_POST['archivo']) && !empty($_POST['archivo']) ? $_POST['archivo'] : "Losdatosgb.txt";
+    $llave = isset($_POST['llave_individual']) ? $_POST['llave_individual'] : obtenerLlaveMaestra();
+
+    if (!$llave) {
+        die("<b>Error:</b> No se encontró una llave válida.");
+    }
+
+    if (file_exists($filename)) {
+        $contenido = file_get_contents($filename);
+
+        //Solo texto 
+        if (isset($_POST['solo_texto']) && $_POST['solo_texto'] == "1") {
+            echo $contenido;
+            exit;
         }
-        ?>
-    </body>
+
+        //mostrar desencriptado
+        $lineas = explode("\n", $contenido);
+        echo "<b>Nota</b><br><br>";
+        foreach ($lineas as $linea) {
+            if (trim($linea) != "") {
+                $desencriptado = desencriptarTexto(trim($linea), $llave);
+                echo nl2br(htmlspecialchars($desencriptado)) . "<br>";
+            }
+        }
+    } else {
+        echo "<br><b>Error:</b> El archivo no existe.<br><br>";
+    }
+
+//llave maestra
+} elseif (isset($_POST['maestra'])) {
+    $llaveMaestra = $_POST['maestra'];
+
+    if (empty($llaveMaestra)) {
+        echo "<b>Error:</b> La llave maestra no puede estar vacía.<br><br>";
+    } else {
+        file_put_contents("llavemaestra.txt", $llaveMaestra);
+        echo "<b>Llave maestra guardada exitosamente.</b>";
+    }
+
+} else {
+    echo "<br><b>Error:</b> No se recibió ninguna acción válida.<br><br>";
+}
+?>
+</body>
 </html>
