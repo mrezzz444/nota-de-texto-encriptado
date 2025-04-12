@@ -12,10 +12,25 @@
         margin: 0;
         padding: 0;
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        flex-direction: row;
         height: 100vh;
+      }
+
+      .container {
+        background-color: #ffffff;
+        padding: 2rem;
+        box-sizing: border-box;
+        flex: 1;
+        overflow-y: auto;
+      }
+
+      .feedback {
+        background-color: #fafafa;
+        padding: 2rem;
+        box-sizing: border-box;
+        flex: 1;
+        border-left: 1px solid #cccccc;
+        overflow-y: auto;
       }
 
       h1 {
@@ -29,7 +44,7 @@
         border-radius: 8px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         width: 100%;
-        max-width: 400px;
+        margin-bottom: 20px;
       }
 
       textarea {
@@ -40,106 +55,114 @@
         border-radius: 4px;
         resize: none;
         font-size: 14px;
+        margin-bottom: 15px;
       }
 
+      input[type="text"],
+      input[type="button"],
       input[type="submit"] {
+        width: 100%;
+        padding: 10px 15px;
+        margin-top: 10px;
+        border-radius: 4px;
+        font-size: 16px;
+        box-sizing: border-box;
+      }
+
+      input[type="text"] {
+        border: 1px solid #ccc;
+      }
+
+      input[type="submit"],
+      input[type="button"] {
         background-color: #4a90e2;
         color: white;
         border: none;
-        padding: 10px 15px;
-        margin-top: 15px;
-        border-radius: 4px;
         cursor: pointer;
-        font-size: 16px;
-        width: 100%;
       }
 
-      input[type="submit"]:hover {
+      input[type="submit"]:hover,
+      input[type="button"]:hover {
         background-color: #357ab8;
       }
+
+      iframe {
+        width: 100%;
+        height: 100%;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #ffffff;
+      }
     </style>
+    <script>
+      let llave = 0;
+
+      function DefinirLlave() {
+        const TLlave = document.getElementById("cLlave").value;
+        llave = 0;
+
+        for (let i = 0; i < TLlave.length; i++) {
+          llave += TLlave.charCodeAt(i); // Suma los valores ASCII de los caracteres
+        }
+      }
+
+      function DesEncriptar() {
+        let textoDesEncriptado = "";
+        const texto = document.getElementById("cTexto").value;
+
+        for (let M = 0; M < texto.length; M++) {
+          const vEntero = texto.charCodeAt(M) - llave; // Resta la llave al valor ASCII
+          textoDesEncriptado += String.fromCharCode(vEntero);
+        }
+
+        document.getElementById("cTexto").value = textoDesEncriptado;
+      }
+
+      function fDesEncriptar() {
+        DefinirLlave();
+        DesEncriptar();
+      }
+    </script>
   </head>
-  <script>
-    let llave = 0;
-
-    function DefinirLlave() {
-      const TLlave = document.getElementById("cLlave").value;
-      llave = 0;
-
-      for (let i = 0; i < TLlave.length; i++) {
-        llave += TLlave.charCodeAt(i); // Suma los valores ASCII de los caracteres
-      }
-    }
-
-    function DesEncriptar() {
-      let textoDesEncriptado = "";
-      const texto = document.getElementById("cTexto").value;
-
-      for (let M = 0; M < texto.length; M++) {
-        const vEntero = texto.charCodeAt(M) - llave; // Resta la llave al valor ASCII
-        textoDesEncriptado += String.fromCharCode(vEntero);
-      }
-
-      document.getElementById("cTexto").value = textoDesEncriptado;
-    }
-
-    function fDesEncriptar() {
-      DefinirLlave();
-      DesEncriptar();
-    }
-  </script>
   <body>
-    <h1>Leer Nota Guardada</h1>
-    <form
-      method="POST"
-      action="http://localhost/elbackend.php"
-      target="resultados"
-    >
-      <input type="hidden" name="leer" value="1" />
-      <input type="submit" value="Leer Nota" />
+    <div class="container">
+      <h1>Leer Nota Guardada</h1>
       <form
         method="POST"
         action="http://localhost/elbackend.php"
         target="resultados"
-      ></form>
-    </form>
-    <iframe
-      name="resultados"
-      style="
-        width: 100%;
-        height: 200px;
-        border: 1px solid #ccc;
-        margin-top: 20px;
-        border-radius: 4px;
-      "
-    ></iframe>
-    <textarea
-      id="cTexto"
-      placeholder="Pega el contenido del iframe para desencriptar"
-    ></textarea>
-    <input type="text" id="cLlave" placeholder="Llave de desencriptación" />
-    <input
-      type="button"
-      value="Desencriptar"
-      id="bDesEncriptar"
-      onclick="fDesEncriptar()"
-    />
-    <br />
-    <form
-      method="POST"
-      action="http://localhost/elbackend.php"
-      target="resultados"
-    >
+      >
+        <input type="hidden" name="leer" value="1" />
+        <input type="submit" value="Leer Nota" />
+      </form>
+      <textarea
+        id="cTexto"
+        placeholder="Pega el contenido del iframe para desencriptar"
+      ></textarea>
+      <input type="text" id="cLlave" placeholder="Llave de desencriptación" />
       <input
-        type="text"
-        name="archivo"
-        placeholder="nombre del archivo"
-        required
-        style="display: block; margin: 0 auto"
+        type="button"
+        value="Desencriptar"
+        id="bDesEncriptar"
+        onclick="fDesEncriptar()"
       />
-
-      <input type="hidden" name="leer" value="1" />
-      <input type="submit" value="LEER NOTA" />
-    </form>
+      <form
+        method="POST"
+        action="http://localhost/elbackend.php"
+        target="resultados"
+      >
+        <input
+          type="text"
+          name="archivo"
+          placeholder="Nombre del archivo"
+          required
+        />
+        <input type="hidden" name="leer" value="1" />
+        <input type="submit" value="LEER NOTA" />
+      </form>
+    </div>
+    <div class="feedback">
+      <iframe name="resultados"></iframe>
+    </div>
   </body>
 </html>
