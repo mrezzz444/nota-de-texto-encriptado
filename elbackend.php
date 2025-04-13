@@ -23,7 +23,20 @@ function obtenerLlaveMaestra() {
 
 //guardar nota
 if (isset($_POST['nota'])) {
+    $archivoPersonalizado = false;
     $filename = "Losdatosgb.txt";
+
+    if (isset($_POST['archivo']) && trim($_POST['archivo']) !== "") {
+        $nombreUsuario = trim($_POST['archivo']);
+        $nombreUsuario = preg_replace("/[^a-zA-Z0-9_-]/", "", $nombreUsuario); // limpieza
+        if (pathinfo($nombreUsuario, PATHINFO_EXTENSION) !== "txt") {
+            $nombreUsuario .= ".txt";
+        }
+        $filename = $nombreUsuario;
+        $archivoPersonalizado = true;
+    }
+    
+    
     $llave = isset($_POST['llave_individual']) ? $_POST['llave_individual'] : obtenerLlaveMaestra();
 
     if (!$llave) {
@@ -35,7 +48,13 @@ if (isset($_POST['nota'])) {
     file_put_contents($filename, $textoEncriptado . "\n");
 
     echo "<br><b>SE GUARDÓ CORRECTAMENTE:</b><br><br>";
-
+    echo "Archivo guardado: <b>$filename</b><br>";
+    if ($archivoPersonalizado) {
+        echo "<b>Archivo personalizado usado:</b> $filename<br><br>";
+    } else {
+        echo "<b>Archivo por defecto usado:</b> $filename<br><br>";
+    }
+    
 
 // Leer nota y desencriptar
 
