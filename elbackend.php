@@ -1,10 +1,14 @@
-<html lang="es-MX">
-<head><title>Ejemplo</title></head>
-<body>
 <?php
+// Configuración de CORS
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
 // Mostrar errores para depuración
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+
+// Manejar solicitud para obtener la llave maestra
 
 // Guardar nota
 if (isset($_POST['nota'])) {
@@ -43,6 +47,7 @@ if (isset($_POST['nota'])) {
     } else {
         echo "<b>Archivo por defecto usado:</b> $filename<br><br>";
     }
+  
 } elseif (isset($_POST['leer'])) {
     $filename = isset($_POST['archivo']) && !empty($_POST['archivo']) ? $_POST['archivo'] : "Losdatosgb";
 
