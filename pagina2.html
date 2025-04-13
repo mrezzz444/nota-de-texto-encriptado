@@ -98,12 +98,10 @@
       let llave = 0;
 
       function DefinirLlave() {
+        // Usar la llave ingresada por el usuario
         const TLlave = document.getElementById("cLlave").value;
-        llave = 0;
-
-        for (let i = 0; i < TLlave.length; i++) {
-          llave += TLlave.charCodeAt(i); // Suma los valores ASCII de los caracteres
-        }
+        llave = parseInt(TLlave, 10) || 0; // Convertir a número, o usar 0 si no es válido
+        console.log("Llave ingresada:", llave);
       }
 
       function DesEncriptar() {
@@ -116,6 +114,7 @@
         }
 
         document.getElementById("cTexto").value = textoDesEncriptado;
+        console.log("Texto desencriptado:", textoDesEncriptado);
       }
 
       function fDesEncriptar() {
@@ -149,6 +148,14 @@
           placeholder="Nombre del archivo"
           required
         />
+        <label>
+          <input
+            type="checkbox"
+            name="usarLlaveMaestra"
+            id="usarLlaveMaestra"
+          />
+          Usar llave maestra
+        </label>
         <input type="hidden" name="leer" value="1" />
         <input type="submit" value="LEER NOTA" />
       </form>

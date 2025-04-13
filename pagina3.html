@@ -35,7 +35,7 @@
       }
 
       input[type="text"],
-      input[type="submit"] {
+      button {
         width: 100%;
         padding: 10px;
         margin-top: 15px;
@@ -45,15 +45,15 @@
         box-sizing: border-box;
       }
 
-      input[type="submit"] {
-        background-color: #4a90e2;
+      button {
+        background-color: #4caf50;
         color: white;
         cursor: pointer;
         border: none;
       }
 
-      input[type="submit"]:hover {
-        background-color: #357ab8;
+      button:hover {
+        background-color: #3e8e41;
       }
 
       .mensaje {
@@ -76,11 +76,13 @@
       </label>
       <input
         type="text"
+        id="llaveMaestra"
         name="maestra"
         placeholder="Escribe la llave maestra"
         required
       />
-      <input type="submit" value="Crear llave maestra" />
+      <button type="button" onclick="generarLlave()">Generar Llave</button>
+      <button type="submit">Actualizar Llave Maestra</button>
     </form>
 
     <iframe
@@ -93,5 +95,13 @@
         margin-top: 15px;
       "
     ></iframe>
+
+    <script>
+      // Función para generar un número aleatorio y asignarlo al campo de texto
+      function generarLlave() {
+        const llaveMaestra = Math.floor(Math.random() * 1000000000); // Número aleatorio de 9 dígitos
+        document.getElementById("llaveMaestra").value = llaveMaestra;
+      }
+    </script>
   </body>
 </html>

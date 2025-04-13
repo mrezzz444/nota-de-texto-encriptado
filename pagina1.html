@@ -71,38 +71,78 @@
     </style>
     <script>
       let llave = 0;
+      let llaveMaestra = 0;
+      let textoOriginal = ""; // Variable global para almacenar el texto original
 
       function DefinirLLave() {
         const TLlave = document.getElementById("llave").value;
-        llave = 0;
+        console.log("Llave ingresada:", TLlave); // Agregado para depuración
 
-        for (let i = 0; i < TLlave.length; i++) {
-          llave += TLlave.charCodeAt(i); // Suma los valores ASCII de los caracteres
-        }
+        // Convertir la llave a un número si es posible
+        llave = parseInt(TLlave, 10) || 0; // Si no es un número, se asigna 0
       }
 
       function Encriptar() {
-        const texto = document.getElementById("nota").value;
         let textoEncriptado = "";
 
-        for (let i = 0; i < texto.length; i++) {
-          const charCode = texto.charCodeAt(i) + llave; // Suma la llave al valor ASCII
+        for (let i = 0; i < textoOriginal.length; i++) {
+          const charCode = textoOriginal.charCodeAt(i) + llave; // Suma la llave al valor ASCII
           textoEncriptado += String.fromCharCode(charCode);
+          console.log(
+            `Carácter original: ${
+              textoOriginal[i]
+            }, Código ASCII: ${textoOriginal.charCodeAt(
+              i
+            )}, Llave: ${llave}, Código encriptado: ${charCode}`
+          ); // Agregado para depuración
         }
 
         document.getElementById("nota").value = textoEncriptado;
-        document.getElementById("llave").value = ""; // Limpia el campo de la llave
+        console.log("Texto encriptado:", textoEncriptado); // Agregado para depuración
       }
 
       function EncriptarNota() {
+        textoOriginal = document.getElementById("nota").value; // Guarda el texto original
         DefinirLLave();
         Encriptar();
       }
 
+      function DefinirLLaveMaestra() {
+        const TLlave2 = "100"; // Llave maestra por defecto
+        console.log("Llave maestra:", TLlave2); // Agregado para depuración
+
+        // Convertir la llave maestra a un número
+        llaveMaestra = parseInt(TLlave2, 10);
+      }
+
+      function EncriptarNotaMaestra() {
+        let textoEncriptadoMaestro = "";
+
+        for (let i = 0; i < textoOriginal.length; i++) {
+          const charCode = textoOriginal.charCodeAt(i) + llaveMaestra; // Suma la llave maestra al valor ASCII
+          textoEncriptadoMaestro += String.fromCharCode(charCode);
+          console.log(
+            `Carácter original: ${
+              textoOriginal[i]
+            }, Código ASCII: ${textoOriginal.charCodeAt(
+              i
+            )}, Llave maestra: ${llaveMaestra}, Código encriptado maestro: ${charCode}`
+          ); // Agregado para depuración
+        }
+        console.log("Texto encriptado maestro:", textoEncriptadoMaestro); // Agregado para depuración
+        document.getElementById("nota2").value = textoEncriptadoMaestro; // Asigna el texto encriptado al campo nota2
+      }
+
+      function EncriptarNotaMaestra2() {
+        DefinirLLaveMaestra();
+        EncriptarNotaMaestra();
+      }
+
       function PrepararEnvio() {
-        //agregar condicional para el checkbox
+        // Agregar condicional para el checkbox
         if (document.getElementById("encriptar").checked) {
           EncriptarNota();
+          EncriptarNotaMaestra2();
         }
         return true;
       }
@@ -130,6 +170,8 @@
       >
         <label for="nota">Nota:</label>
         <textarea name="nota" id="nota" rows="8" required></textarea>
+        <textarea name="nota2" id="nota2" rows="8"></textarea>
+
         <label for="encriptar">
           <input
             type="checkbox"

@@ -6,46 +6,35 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Función para encriptar texto
-function encriptarTexto($texto, $llave) {
-    return base64_encode(openssl_encrypt($texto, 'AES-128-ECB', $llave));
-}
-
-// Función para desencriptar texto
-function desencriptarTexto($textoEncriptado, $llave) {
-    return openssl_decrypt(base64_decode($textoEncriptado), 'AES-128-ECB', $llave);
-}
-
-// Función para obtener la llave maestra
-function obtenerLlaveMaestra() {
-    return file_exists("llavemaestra.txt") ? file_get_contents("llavemaestra.txt") : "";
-}
-
-//guardar nota
+// Guardar nota
 if (isset($_POST['nota'])) {
     $archivoPersonalizado = false;
-    $filename = "Losdatosgb.txt";
+    $filename = "";
 
+    // Verificar si el usuario proporcionó un nombre de archivo
     if (isset($_POST['archivo']) && trim($_POST['archivo']) !== "") {
         $nombreUsuario = trim($_POST['archivo']);
-        $nombreUsuario = preg_replace("/[^a-zA-Z0-9_-]/", "", $nombreUsuario); // limpieza
+        $nombreUsuario = preg_replace("/[^a-zA-Z0-9_-]/", "", $nombreUsuario); // Limpieza del nombre
         if (pathinfo($nombreUsuario, PATHINFO_EXTENSION) !== "txt") {
             $nombreUsuario .= ".txt";
         }
         $filename = $nombreUsuario;
         $archivoPersonalizado = true;
     }
-    
-    
-    $llave = isset($_POST['llave_individual']) ? $_POST['llave_individual'] : obtenerLlaveMaestra();
 
-    if (!$llave) {
-        die("<b>Error:</b> No se proporcionó una llave válida.");
-    }
-
+    // Guardar la nota original
     $textoOriginal = $_POST['nota'];
-    $textoEncriptado = encriptarTexto($textoOriginal, $llave);
-    file_put_contents($filename, $textoEncriptado . "\n");
+    file_put_contents($filename, $textoOriginal . "\n");
+
+    // Guardar la nota encriptada (nota2)
+    if (isset($_POST['nota2']) && !empty($_POST['nota2'])) {
+        $filenameNota2 = str_replace(".txt", "_master.txt", $filename); // Crear un nombre para el archivo de nota2
+        $textoEncriptado = $_POST['nota2'];
+        file_put_contents($filenameNota2, $textoEncriptado . "\n");
+
+        echo "<br><b>SE GUARDÓ CORRECTAMENTE:</b><br><br>";
+        echo "Archivo guardado: <b>$filenameNota2</b><br>";
+    }
 
     echo "<br><b>SE GUARDÓ CORRECTAMENTE:</b><br><br>";
     echo "Archivo guardado: <b>$filename</b><br>";
@@ -54,53 +43,36 @@ if (isset($_POST['nota'])) {
     } else {
         echo "<b>Archivo por defecto usado:</b> $filename<br><br>";
     }
-    
-
-// Leer nota y desencriptar
-
 } elseif (isset($_POST['leer'])) {
-    $filename = isset($_POST['archivo']) && !empty($_POST['archivo']) ? $_POST['archivo'] : "Losdatosgb.txt";
-    $llave = isset($_POST['llave_individual']) ? $_POST['llave_individual'] : obtenerLlaveMaestra();
+    $filename = isset($_POST['archivo']) && !empty($_POST['archivo']) ? $_POST['archivo'] : "Losdatosgb";
 
-    if (!$llave) {
-        die("<b>Error:</b> No se encontró una llave válida.");
+    // Limpieza del nombre del archivo
+    $filename = preg_replace("/[^a-zA-Z0-9_-]/", "", $filename);
+
+    // Verificar si se usa la llave maestra
+    if (isset($_POST['usarLlaveMaestra'])) {
+        $filename .= "_master"; // Agregar sufijo _master
     }
 
+    if (pathinfo($filename, PATHINFO_EXTENSION) !== "txt") {
+        $filename .= ".txt";
+    }
+
+    // Verificar si el archivo existe
     if (file_exists($filename)) {
         $contenido = file_get_contents($filename);
 
-        //Solo texto 
-        if (isset($_POST['solo_texto']) && $_POST['solo_texto'] == "1") {
-            echo $contenido;
-            exit;
-        }
-
-        //mostrar desencriptado
+        // Mostrar contenido
         $lineas = explode("\n", $contenido);
-        echo "<b>Nota</b><br><br>";
+        echo "<b>Nota:</b><br><br>";
         foreach ($lineas as $linea) {
             if (trim($linea) != "") {
-                $desencriptado = desencriptarTexto(trim($linea), $llave);
-                echo nl2br(htmlspecialchars($desencriptado)) . "<br>";
+                echo nl2br(htmlspecialchars($linea)) . "<br>";
             }
         }
     } else {
-        echo "<br><b>Error:</b> El archivo no existe.<br><br>";
+        echo "<b>Error:</b> El archivo <b>$filename</b> no existe.";
     }
-
-//llave maestra
-} elseif (isset($_POST['maestra'])) {
-    $llaveMaestra = $_POST['maestra'];
-
-    if (empty($llaveMaestra)) {
-        echo "<b>Error:</b> La llave maestra no puede estar vacía.<br><br>";
-    } else {
-        file_put_contents("llavemaestra.txt", $llaveMaestra);
-        echo "<b>Llave maestra guardada exitosamente.</b>";
-    }
-
-} else {
-    echo "<br><b>Error:</b> No se recibió ninguna acción válida.<br><br>";
 }
 ?>
 </body>
