@@ -37,12 +37,19 @@
         margin: 0 15px;
         font-size: 16px;
         font-weight: bold;
-        transition: color 0.3s ease;
+        transition: color 0.3s ease, border-bottom 0.3s ease;
         line-height: 30px;
+        padding: 5px 10px;
+        border-radius: 5px;
       }
 
       .topbar a:hover {
         color: #d1e8ff;
+      }
+
+      .topbar a.active {
+        border-bottom: 3px solid #ffffff; /* Subrayado decorativo */
+        color: #ffffff;
       }
 
       #contenidoIframe {
@@ -57,17 +64,32 @@
   </head>
   <body>
     <div class="topbar">
-      <a href="#" onclick="cambiarContenido('pagina1.html')">Escribir nota</a>
-      <a href="#" onclick="cambiarContenido('pagina2.html')">Leer nota</a>
-      <a href="#" onclick="cambiarContenido('pagina3.html')">Generar llave</a>
+      <a href="#" onclick="cambiarContenido('pagina1.html', this)"
+        >Escribir nota</a
+      >
+      <a href="#" onclick="cambiarContenido('pagina2.html', this)">Leer nota</a>
+      <a href="#" onclick="cambiarContenido('pagina3.html', this)"
+        >Generar llave</a
+      >
     </div>
 
     <iframe id="contenidoIframe" src="pagina1.html"></iframe>
 
     <script>
-      function cambiarContenido(pagina) {
+      function cambiarContenido(pagina, elemento) {
+        // Cambiar el contenido del iframe
         document.getElementById("contenidoIframe").src = pagina;
+
+        // Quitar la clase 'active' de todos los enlaces
+        const enlaces = document.querySelectorAll(".topbar a");
+        enlaces.forEach((enlace) => enlace.classList.remove("active"));
+
+        // Agregar la clase 'active' al enlace actual
+        elemento.classList.add("active");
       }
+
+      // Marcar el primer enlace como activo al cargar la página
+      document.querySelector(".topbar a").classList.add("active");
     </script>
   </body>
 </html>
