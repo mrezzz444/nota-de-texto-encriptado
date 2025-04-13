@@ -70,15 +70,17 @@
       method="POST"
       action="http://localhost/elbackend.php"
       target="resultado"
+      onsubmit="asignarLlave()"
     >
-      <label for="llave" style="display: block; text-align: center"
-        >LLAVE MAESTRA
+      <label for="llaveMaestra" style="display: block; text-align: center">
+        LLAVE MAESTRA
       </label>
       <input
         type="text"
         id="llaveMaestra"
-        name="maestra"
-        placeholder="Escribe la llave maestra"
+        name="llaveMaestra"
+        placeholder="Llave Maestra por defecto :100"
+        readonly
         required
       />
       <button type="button" onclick="generarLlave()">Generar Llave</button>
@@ -97,10 +99,24 @@
     ></iframe>
 
     <script>
-      // Función para generar un número aleatorio y asignarlo al campo de texto
+      // Variable para almacenar la llave generada
+      let llaveGenerada = "";
+
+      // Función para generar un número aleatorio y asignarlo a la variable
       function generarLlave() {
-        const llaveMaestra = Math.floor(Math.random() * 1000000000); // Número aleatorio de 9 dígitos
-        document.getElementById("llaveMaestra").value = llaveMaestra;
+        llaveGenerada = Math.floor(Math.random() * 1000000000); // Número aleatorio de 9 dígitos
+        document.getElementById("llaveMaestra").value = llaveGenerada;
+      }
+
+      // Función para asignar la llave generada al campo antes de enviar el formulario
+      function asignarLlave() {
+        if (!llaveGenerada) {
+          alert("Por favor, genera una llave antes de enviar.");
+          return false; // Evita el envío si no se ha generado una llave
+        }
+        // Asigna la llave generada al campo de entrada
+        document.getElementById("llaveMaestra").value = llaveGenerada;
+        return true; // Permite el envío del formulario
       }
     </script>
   </body>

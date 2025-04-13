@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Leer Nota</title>
+    <title>Notas Encriptadas</title>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -16,57 +16,64 @@
         height: 100vh;
       }
 
-      .container {
-        background-color: #ffffff;
-        padding: 2rem;
-        box-sizing: border-box;
+      .container,
+      .feedback {
         flex: 1;
         overflow-y: auto;
+        box-sizing: border-box;
+        padding: 2rem;
+      }
+
+      .container {
+        background-color: #ffffff;
       }
 
       .feedback {
         background-color: #fafafa;
-        padding: 2rem;
-        box-sizing: border-box;
-        flex: 1;
         border-left: 1px solid #cccccc;
-        overflow-y: auto;
       }
 
       h1 {
         color: #4a90e2;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
+        font-size: 24px;
+      }
+
+      fieldset {
+        margin-bottom: 25px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px 20px;
+      }
+
+      legend {
+        font-weight: bold;
+        color: #4a90e2;
+        padding: 0 10px;
       }
 
       form {
-        background: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        margin-bottom: 20px;
+        margin-top: 10px;
       }
 
-      textarea {
-        width: 100%;
-        height: 150px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        resize: none;
-        font-size: 14px;
-        margin-bottom: 15px;
-      }
-
+      textarea,
       input[type="text"],
       input[type="button"],
-      input[type="submit"] {
+      input[type="submit"],
+      button {
         width: 100%;
-        padding: 10px 15px;
+        padding: 10px;
         margin-top: 10px;
         border-radius: 4px;
         font-size: 16px;
         box-sizing: border-box;
+      }
+
+      textarea {
+        height: 150px;
+        resize: none;
+        font-size: 14px;
+        border: 1px solid #ccc;
       }
 
       input[type="text"] {
@@ -74,7 +81,8 @@
       }
 
       input[type="submit"],
-      input[type="button"] {
+      input[type="button"],
+      button {
         background-color: #4a90e2;
         color: white;
         border: none;
@@ -82,26 +90,62 @@
       }
 
       input[type="submit"]:hover,
-      input[type="button"]:hover {
+      input[type="button"]:hover,
+      button:hover {
         background-color: #357ab8;
+      }
+
+      .green-btn {
+        background-color: #4caf50;
+      }
+
+      .green-btn:hover {
+        background-color: #3e8e41;
       }
 
       iframe {
         width: 100%;
-        height: 100%;
+        height: 100px;
         border: 1px solid #ccc;
         border-radius: 4px;
         background-color: #ffffff;
+        margin-top: 15px;
       }
     </style>
     <script>
       let llave = 0;
+      let llaveMaestra = "100";
+
+      function generarLlave() {
+        llaveMaestra = Math.floor(Math.random() * 1000000000);
+        document.getElementById("llaveMaestra").value = llaveMaestra;
+        console.log("Llave maestra generada:", llaveMaestra);
+      }
+
+      function asignarLlave() {
+        if (!llaveMaestra) {
+          alert("Por favor, genera una llave antes de enviar.");
+          return false;
+        }
+        document.getElementById("llaveMaestra").value = llaveMaestra;
+        return true;
+      }
 
       function DefinirLlave() {
-        // Usar la llave ingresada por el usuario
-        const TLlave = document.getElementById("cLlave").value;
-        llave = parseInt(TLlave, 10) || 0; // Convertir a número, o usar 0 si no es válido
-        console.log("Llave ingresada:", llave);
+        let TLlave = 100;
+
+        if (document.getElementById("usarLlaveMaestra").checked) {
+          if (document.getElementById("cLlave").value == llaveMaestra) {
+            TLlave = 100;
+          } else {
+            alert("Llave maestra incorrecta");
+            return;
+          }
+        } else {
+          TLlave = document.getElementById("cLlave").value;
+        }
+
+        llave = parseInt(TLlave, 10) || 0;
       }
 
       function DesEncriptar() {
@@ -109,12 +153,11 @@
         const texto = document.getElementById("cTexto").value;
 
         for (let M = 0; M < texto.length; M++) {
-          const vEntero = texto.charCodeAt(M) - llave; // Resta la llave al valor ASCII
+          const vEntero = texto.charCodeAt(M) - llave;
           textoDesEncriptado += String.fromCharCode(vEntero);
         }
 
         document.getElementById("cTexto").value = textoDesEncriptado;
-        console.log("Texto desencriptado:", textoDesEncriptado);
       }
 
       function fDesEncriptar() {
@@ -125,43 +168,77 @@
   </head>
   <body>
     <div class="container">
-      <h1>Leer Nota Guardada</h1>
-      <textarea
-        id="cTexto"
-        placeholder="Pega el contenido del iframe para desencriptar"
-      ></textarea>
-      <input type="text" id="cLlave" placeholder="Llave de desencriptación" />
-      <input
-        type="button"
-        value="Desencriptar"
-        id="bDesEncriptar"
-        onclick="fDesEncriptar()"
-      />
+      <fieldset>
+        <legend>PASO 1: Generar o Confirmar Llave Maestra</legend>
+      </fieldset>
+
+      <fieldset>
+        <legend>PASO 2: Leer Nota desde el Servidor</legend>
+        <form
+          method="POST"
+          action="http://localhost/elbackend.php"
+          target="resultados"
+        >
+          <input
+            type="text"
+            name="archivo"
+            placeholder="Nombre del archivo"
+            required
+          />
+          <label>
+            <input
+              type="checkbox"
+              id="usarLlaveMaestra"
+              name="usarLlaveMaestra"
+            />
+            Usar llave maestra
+          </label>
+          <input type="hidden" name="leer" value="1" />
+          <input type="submit" value="Leer Nota" />
+        </form>
+      </fieldset>
+
+      <fieldset>
+        <legend>PASO 3: Pegar Nota Recibida</legend>
+        <textarea
+          id="cTexto"
+          placeholder="Pega aquí el contenido recibido en el iframe"
+        ></textarea>
+      </fieldset>
+
+      <fieldset>
+        <legend>PASO 4: Desencriptar</legend>
+        <input type="text" id="cLlave" placeholder="Llave de desencriptación" />
+        <input
+          type="button"
+          value="Desencriptar Nota"
+          onclick="fDesEncriptar()"
+        />
+      </fieldset>
+    </div>
+
+    <div class="feedback">
+      <iframe name="resultados"></iframe>
       <form
         method="POST"
         action="http://localhost/elbackend.php"
         target="resultados"
+        onsubmit="return asignarLlave()"
       >
+        <label for="llaveMaestra">Llave Maestra:</label>
         <input
           type="text"
-          name="archivo"
-          placeholder="Nombre del archivo"
+          id="llaveMaestra"
+          name="llaveMaestra"
+          placeholder="Llave Maestra por defecto : 100"
+          readonly
           required
         />
-        <label>
-          <input
-            type="checkbox"
-            name="usarLlaveMaestra"
-            id="usarLlaveMaestra"
-          />
-          Usar llave maestra
-        </label>
-        <input type="hidden" name="leer" value="1" />
-        <input type="submit" value="LEER NOTA" />
+        <button type="button" class="green-btn" onclick="generarLlave()">
+          Generar Llave
+        </button>
+        <button type="submit">Actualizar Llave Maestra</button>
       </form>
-    </div>
-    <div class="feedback">
-      <iframe name="resultados"></iframe>
     </div>
   </body>
 </html>
